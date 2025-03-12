@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cypris - Home</title>
+    <script>
+        function navigate(page) {
+            fetch(page + '.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('content').innerHTML = html;
+                    history.pushState(null, '', page);
+                })
+                .catch(error => console.error('Error loading page:', error));
+        }
+
+        window.onpopstate = function () {
+            let path = window.location.pathname.substring(1);
+            if (path) navigate(path);
+        };
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="#" onclick="navigate('terms-of-service')">Terms of Service</a> |
+        <a href="#" onclick="navigate('privacy-policy')">Privacy Policy</a>
+    </nav>
+    <div id="content">
+        <h1>Welcome to Cypris</h1>
+        <p>Select an option above to view details.</p>
+    </div>
+</body>
+</html>
