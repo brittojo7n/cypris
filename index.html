@@ -4,31 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypris - Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        nav {
+            background: #333;
+            padding: 15px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #f4b400;
+        }
+        .container {
+            margin-top: 100px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
     <script>
         function navigate(page) {
-            fetch(page + '.html')
+            const base = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
+            fetch(base + page + '.html')
                 .then(response => response.text())
                 .then(html => {
                     document.getElementById('content').innerHTML = html;
-                    history.pushState(null, '', page);
+                    history.pushState(null, '', base + page);
                 })
                 .catch(error => console.error('Error loading page:', error));
         }
 
         window.onpopstate = function () {
-            let path = window.location.pathname.substring(1);
-            if (path) navigate(path);
+            let path = window.location.pathname.split('/').pop();
+            if (path && path !== 'index.html') navigate(path);
         };
     </script>
 </head>
 <body>
     <nav>
-        <a href="#" onclick="navigate('terms-of-service')">Terms of Service</a> |
-        <a href="#" onclick="navigate('privacy-policy')">Privacy Policy</a>
+        <a href="#" onclick="navigate('terms-of-service'); return false;">Terms of Service</a>
+        <a href="#" onclick="navigate('privacy-policy'); return false;">Privacy Policy</a>
     </nav>
-    <div id="content">
+    <div class="container">
         <h1>Welcome to Cypris</h1>
         <p>Select an option above to view details.</p>
+        <div id="content"></div>
     </div>
 </body>
 </html>
